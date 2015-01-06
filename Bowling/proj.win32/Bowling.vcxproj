@@ -140,6 +140,7 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\classes\DrawNode3D.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsWorld3D.cpp" />
@@ -147,6 +148,7 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\classes\DrawNode3D.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsDraw3D.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsWorld3D.h" />

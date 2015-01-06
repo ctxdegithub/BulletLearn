@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="physics3D">
+      <UniqueIdentifier>{0633ca63-2324-40a2-9eaa-0c0a03460a62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -17,8 +20,13 @@
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
-    <ClCompile Include="..\Classes\physics3d\PhysicsWorld3D.cpp" />
-    <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp" />
+    <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp">
+      <Filter>physics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\physics3d\PhysicsWorld3D.cpp">
+      <Filter>physics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\classes\DrawNode3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -26,8 +34,13 @@
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
-    <ClInclude Include="..\Classes\physics3d\PhysicsWorld3D.h" />
-    <ClInclude Include="..\Classes\physics3d\PhysicsDraw3D.h" />
+    <ClInclude Include="..\Classes\physics3d\PhysicsWorld3D.h">
+      <Filter>physics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\physics3d\PhysicsDraw3D.h">
+      <Filter>physics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\classes\DrawNode3D.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

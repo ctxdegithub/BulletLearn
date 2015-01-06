@@ -1,6 +1,5 @@
 #include "HelloWorldScene.h"
 #include "cocostudio/CocoStudio.h"
-#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -36,7 +35,9 @@ bool HelloWorld::init()
 		addChild(rootNode);
 		auto closeItem = static_cast<ui::Button*>(rootNode->getChildByName("Button_1"));
 		closeItem->addClickEventListener(CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-
+		
+		_labelInfo = static_cast<ui::Text*>(rootNode->getChildByName("lbl_body_info"));
+		
 		this->scheduleUpdate();
 
 		return true;
@@ -47,7 +48,7 @@ bool HelloWorld::init()
 
 bool HelloWorld::initPhysics3D()
 {
-	_world = PhysicsWorld3D::create();	// 创建3d物理世界
+	_world = PhysicsWorld3D::createWithDebug(this);	// 创建3d物理世界
 	if (_world == nullptr)
 	{
 		return false;
@@ -140,6 +141,12 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 	pos.setX(CCRANDOM_MINUS1_1() * 10);
 	pos.setZ(CCRANDOM_MINUS1_1() * 10);
 	_world->addSphere(0.5f, pos, PhysicsMaterial3D(CCRANDOM_0_1() + 0.1f, 0.5f, 0.5f, 0.7f));
+
+	static int s_bodyCount = 1;
+	s_bodyCount++;
+	auto info = __String::createWithFormat("%d", s_bodyCount)->getCString();
+	_labelInfo->setString(info);
+
 	return true;
 }
 

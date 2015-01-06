@@ -2,6 +2,8 @@
 #define __PHYSICS_WORLD_3D_H__
 
 #include "bullet/btBulletDynamicsCommon.h"
+#include "cocos2d.h"
+USING_NS_CC;
 
 class PhysicsDraw3D;
 
@@ -36,7 +38,8 @@ public:
 	~PhysicsWorld3D();
 
 	static PhysicsWorld3D* create(const btVector3& gravity = btVector3(0, -10, 0));
-	bool initWorld(const btVector3& gravity);
+	static PhysicsWorld3D* createWithDebug(Node* layer, const btVector3& gravity = btVector3(0, -10, 0));
+
 	void destroy();
 	void debugDraw();
 
@@ -49,6 +52,8 @@ public:
 	void update(float dt);
 
 private:
+	bool initWorld(const btVector3& gravity);
+	bool initWorldWithDebug(Node* layer, const btVector3& gravity);
 	void clear();
 
 private:

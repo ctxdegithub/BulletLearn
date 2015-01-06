@@ -25,6 +25,15 @@
             <PressedFileData Type="Normal" Path="iphone/CloseSelected.png" />
             <NormalFileData Type="Normal" Path="iphone/CloseNormal.png" />
           </NodeObjectData>
+          <NodeObjectData Name="lbl_body_info" ActionTag="-166722524" FrameEvent="" Tag="4" ObjectIndex="1" FontSize="20" LabelText="1" ctype="TextObjectData">
+            <Position X="95.4523" Y="124.3093" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <Size X="10.0000" Y="20.0000" />
+            <PrePosition X="0.0994" Y="0.1942" />
+            <PreSize X="0.0000" Y="0.0000" />
+          </NodeObjectData>
         </Children>
       </ObjectData>
     </Content>

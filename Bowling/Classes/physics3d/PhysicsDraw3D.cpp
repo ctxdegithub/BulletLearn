@@ -10,10 +10,10 @@ PhysicsDraw3D::~PhysicsDraw3D()
 	
 }
 
-PhysicsDraw3D* PhysicsDraw3D::create()
+PhysicsDraw3D* PhysicsDraw3D::createWithLayer(Node* layer)
 {
 	auto draw = new PhysicsDraw3D;
-	if (draw && draw->initDraw())
+	if (draw && draw->initWithLayer(layer))
 	{
 		return draw;
 	}
@@ -21,28 +21,23 @@ PhysicsDraw3D* PhysicsDraw3D::create()
 	return nullptr;
 }
 
-bool PhysicsDraw3D::initDraw()
-{
-	_shader = GLProgramCache::getInstance()->getGLProgram(GLProgram::SHADER_NAME_POSITION_U_COLOR);
-	if (_shader == nullptr)
-	{
-		return false;
-	}
-	_shader->retain();
-
-	_colorLocation = _shader->getUniformLocation("u_color");
-	CHECK_GL_ERROR_DEBUG();
-	_pointSizeLocation = _shader->getUniformLocation("u_pointSize");
-	CHECK_GL_ERROR_DEBUG();
-	
+bool PhysicsDraw3D::initWithLayer(Node* layer)
+{	
+	_drawNode = DrawNode3D::create();
+	layer->addChild(_drawNode);
 	_debugDrawMode = btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE;
 	return true;
 }
 
 void PhysicsDraw3D::destroy()
 {
-	CC_SAFE_RELEASE_NULL(_shader);
+	_drawNode->removeFromParent();
 	delete this;
+}
+
+void PhysicsDraw3D::clearDraw()
+{
+	_drawNode->clear();
 }
 
 void PhysicsDraw3D::drawLine(const btVector3& from,const btVector3& to,const btVector3& color)
@@ -55,24 +50,24 @@ void PhysicsDraw3D::drawLine(const btVector3& from,const btVector3& to,const btV
 	_color.r = color.x();
 	_color.g = color.y();
 	_color.b = color.z();
+	_color.a = 1.f;
 
-	_shader->use();
-	_shader->setUniformsForBuiltins();
-	_shader->setUniformLocationWith4fv(_colorLocation, (GLfloat*) &_color.r, 1);
-
-	glEnable(GL_DEPTH_TEST);
-	
-	GL::enableVertexAttribs( GL::VERTEX_ATTRIB_FLAG_POSITION );
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-	glDrawArrays(GL_LINES, 0, 2);
-
-	glDisable(GL_DEPTH_TEST);
-	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1,2);	
+	_drawNode->drawLine(vertices[0], vertices[1], _color);
 }
 
-void PhysicsDraw3D::drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
+void PhysicsDraw3D::drawContactPoint(const btVector3& pointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
 {
+	btVector3 tov3 = pointOnB + normalOnB * distance;
 
+	Vec3 from = Vec3(pointOnB.x(), pointOnB.y(), pointOnB.z());
+	Vec3 to = Vec3(tov3.x(), tov3.y(), tov3.z());
+	_color.r = color.x();
+	_color.g = color.y();
+	_color.b = color.z();
+	_color.a = 1.f;
+
+	_drawNode->drawLine(from, to, _color);
+	_drawNode->drawPoint(from, 2, _color);
 }
 
 void PhysicsDraw3D::reportErrorWarning(const char* warningString)

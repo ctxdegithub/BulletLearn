@@ -1,7 +1,5 @@
 #include "PhysicsWorld3D.h"
 #include "PhysicsDraw3D.h"
-#include "cocos2d.h"
-
 
 PhysicsWorld3D::~PhysicsWorld3D()
 {
@@ -30,9 +28,11 @@ void PhysicsWorld3D::clear()
 void PhysicsWorld3D::destroy()
 {
 	this->clear();
-
-	_debugDraw->destroy();
-	_debugDraw = nullptr;
+	if (_debugDraw)
+	{
+		_debugDraw->destroy();
+		_debugDraw = nullptr;
+	}
 
 	delete _collisionConfiguration;
 	delete _dispatcher;
@@ -54,15 +54,25 @@ PhysicsWorld3D* PhysicsWorld3D::create(const btVector3& gravity)
 	return nullptr;
 }
 
+PhysicsWorld3D* PhysicsWorld3D::createWithDebug(Node* layer, const btVector3& gravity)
+{
+	auto world = new PhysicsWorld3D;
+	if (world && world->initWorldWithDebug(layer, gravity))
+	{
+		return world;
+	}
+
+	delete world;
+	return nullptr;
+}
+
 bool PhysicsWorld3D::initWorld(const btVector3& gravity)
 {
 	_collisionConfiguration = new btDefaultCollisionConfiguration();
-
 	_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
-
 	_overlappingPairCache = new btDbvtBroadphase();
-
 	_solver = new btSequentialImpulseConstraintSolver;
+
 	_world = new btDiscreteDynamicsWorld(_dispatcher, _overlappingPairCache, _solver, _collisionConfiguration);
 	if (_world == nullptr)
 	{
@@ -70,16 +80,30 @@ bool PhysicsWorld3D::initWorld(const btVector3& gravity)
 	}
 	
 	_world->setGravity(gravity);
+	_debugDraw = nullptr;
 
-	_debugDraw = PhysicsDraw3D::create();
+	return true;
+}
+
+bool PhysicsWorld3D::initWorldWithDebug(Node* layer, const btVector3& gravity)
+{
+	if (!this->initWorld(gravity))
+	{
+		return false;
+	}
+
+	_debugDraw = PhysicsDraw3D::createWithLayer(layer);
 	_world->setDebugDrawer(_debugDraw);
-
+	
 	return true;
 }
 
 void PhysicsWorld3D::setDebugDrawMode(int mode)
 {
-	_debugDraw->setDebugMode(mode);
+	if (_debugDraw)
+	{
+		_debugDraw->setDebugMode(mode);
+	}
 }
 
 btRigidBody* PhysicsWorld3D::addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material)
@@ -140,7 +164,11 @@ btRigidBody* PhysicsWorld3D::getBody(btCollisionShape* colShape, const btVector3
 
 void PhysicsWorld3D::debugDraw()
 {
-	_world->debugDrawWorld();
+	if (_debugDraw)
+	{
+		_debugDraw->clearDraw();
+		_world->debugDrawWorld();
+	}
 }
 
 void PhysicsWorld3D::update(float dt)
