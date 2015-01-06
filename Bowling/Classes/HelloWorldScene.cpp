@@ -59,7 +59,7 @@ bool HelloWorld::initPhysics3D()
 	spPlane->setPosition3D(Vec3::ZERO);
 	
 	// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
-	_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PhysicsMaterial3D(0, 0.5, 0.5, 0));
+	_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
 	
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");
@@ -135,6 +135,11 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 {
 	_box->setActivationState(ACTIVE_TAG);
 	_box->applyCentralImpulse(btVector3(0, 0, -5));
+
+	auto pos = btVector3(0, 40, 0);
+	pos.setX(CCRANDOM_MINUS1_1() * 10);
+	pos.setZ(CCRANDOM_MINUS1_1() * 10);
+	_world->addSphere(0.5f, pos, PhysicsMaterial3D(CCRANDOM_0_1() + 0.1f, 0.5f, 0.5f, 0.7f));
 	return true;
 }
 

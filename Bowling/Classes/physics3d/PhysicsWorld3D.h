@@ -1,3 +1,6 @@
+#ifndef __PHYSICS_WORLD_3D_H__
+#define __PHYSICS_WORLD_3D_H__
+
 #include "bullet/btBulletDynamicsCommon.h"
 
 class PhysicsDraw3D;
@@ -25,6 +28,7 @@ struct PhysicsMaterial3D
 };
 
 const PhysicsMaterial3D PHYSICS_MATERIAL3D_DEFAULT(1.f, 0.5f, 0.5f, 0.0f);
+const PhysicsMaterial3D PHYSICS_MATERIAL3D_PLANE(0.f, 0.5f, 0.5f, 0.0f);
 
 class PhysicsWorld3D
 {
@@ -38,7 +42,7 @@ public:
 
 	void setDebugDrawMode(int mode);
 
-	btRigidBody* addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
+	btRigidBody* addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
 	btRigidBody* addSphere(btScalar radius, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 	btRigidBody* addBox(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 
@@ -59,3 +63,6 @@ private:
 
 	PhysicsDraw3D* _debugDraw;
 };
+
+
+#endif

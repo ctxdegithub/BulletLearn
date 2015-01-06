@@ -1,7 +1,9 @@
+#ifndef __PHYSICS_DRAW_3D_H__
+#define __PHYSICS_DRAW_3D_H__
+
 #include "cocos2d.h"
 #include "Bullet/LinearMath/btIDebugDraw.h"
 USING_NS_CC;
-
 
 class PhysicsDraw3D : public btIDebugDraw
 {
@@ -31,3 +33,5 @@ private:
 	int _pointSizeLocation;
 	GLfloat _pointSize;
 };
+
+#endif 
