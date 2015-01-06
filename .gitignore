@@ -2,4 +2,5 @@
 /Bowling/proj.win32/Debug.win32/
 
 ################# files ##############
-/Bowling/proj.win32/*.sdf
+/Bowling/proj.win32/Bowling.sdf
+/proj.win32/Bowling.opensdf
