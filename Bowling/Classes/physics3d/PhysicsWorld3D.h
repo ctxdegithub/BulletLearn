@@ -48,6 +48,8 @@ public:
 	btRigidBody* addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
 	btRigidBody* addSphere(btScalar radius, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 	btRigidBody* addBox(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
+	btRigidBody* addCylinder(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT, char xyz = 'y');
+	btRigidBody* addCapsule(btScalar radius, btScalar height, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT, char xyz = 'y');
 
 	void update(float dt);
 

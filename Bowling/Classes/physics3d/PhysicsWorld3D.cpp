@@ -136,6 +136,52 @@ btRigidBody* PhysicsWorld3D::addBox(const btVector3& size, const btVector3& posi
 	return body;
 }
 
+btRigidBody* PhysicsWorld3D::addCylinder(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material, char xyz)
+{
+	btCollisionShape* colShape = nullptr;
+	switch (xyz)
+	{
+	case 'x':
+		colShape = new btCylinderShapeX(size * 0.5f); // halfSize
+		break;
+	case 'y':
+		colShape = new btCylinderShape(size * 0.5f); // halfSize
+		break;
+	case 'z':
+		colShape = new btCylinderShapeZ(size * 0.5f); // halfSize
+		break;
+	}
+	
+	auto body = getBody(colShape, position, material);
+
+	_world->addRigidBody(body);
+
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addCapsule(btScalar radius, btScalar height, const btVector3& position, const PhysicsMaterial3D& material, char xyz)
+{
+	btCollisionShape* colShape = nullptr;
+	switch (xyz)
+	{
+	case 'x':
+		colShape = new btCapsuleShapeX(radius, height); // halfSize
+		break;
+	case 'y':
+		colShape = new btCapsuleShape(radius, height); // halfSize
+		break;
+	case 'z':
+		colShape = new btCapsuleShapeZ(radius, height); // halfSize
+		break;
+	}
+
+	auto body = getBody(colShape, position, material);
+
+	_world->addRigidBody(body);
+
+	return body;
+}
+
 btRigidBody* PhysicsWorld3D::getBody(btCollisionShape* colShape, const btVector3& position, const PhysicsMaterial3D& material)
 {
 	/// Create Dynamic Objects
