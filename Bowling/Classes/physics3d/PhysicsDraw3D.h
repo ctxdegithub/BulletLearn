@@ -6,6 +6,11 @@ USING_NS_CC;
 class PhysicsDraw3D : public btIDebugDraw
 {
 public:
+	PhysicsDraw3D();
+	~PhysicsDraw3D();
+	static PhysicsDraw3D* create();
+	void destroy();
+
 	void drawLine(const btVector3& from,const btVector3& to,const btVector3& color);
 	void drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color);
 	void reportErrorWarning(const char* warningString);
@@ -14,5 +19,15 @@ public:
 	int getDebugMode() const;
 
 private:
+	bool initDraw();
+
+private:
 	int _debugDrawMode;
+
+private:
+	GLProgram* _shader;
+	int _colorLocation;
+	Color4F _color;
+	int _pointSizeLocation;
+	GLfloat _pointSize;
 };

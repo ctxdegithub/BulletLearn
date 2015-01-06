@@ -31,7 +31,9 @@ void PhysicsWorld3D::destroy()
 {
 	this->clear();
 
-	delete _debugDraw;
+	_debugDraw->destroy();
+	_debugDraw = nullptr;
+
 	delete _collisionConfiguration;
 	delete _dispatcher;
 	delete _solver;
@@ -56,7 +58,7 @@ bool PhysicsWorld3D::initWorld(const btVector3& gravity)
 {
 	_collisionConfiguration = new btDefaultCollisionConfiguration();
 
-	_dispatcher = new	btCollisionDispatcher(_collisionConfiguration);
+	_dispatcher = new btCollisionDispatcher(_collisionConfiguration);
 
 	_overlappingPairCache = new btDbvtBroadphase();
 
@@ -68,10 +70,16 @@ bool PhysicsWorld3D::initWorld(const btVector3& gravity)
 	}
 	
 	_world->setGravity(gravity);
-	_debugDraw = new PhysicsDraw3D;
+
+	_debugDraw = PhysicsDraw3D::create();
 	_world->setDebugDrawer(_debugDraw);
 
 	return true;
+}
+
+void PhysicsWorld3D::setDebugDrawMode(int mode)
+{
+	_debugDraw->setDebugMode(mode);
 }
 
 btRigidBody* PhysicsWorld3D::addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material)

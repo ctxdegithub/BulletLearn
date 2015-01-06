@@ -30,6 +30,7 @@ bool HelloWorld::init()
 
 		CC_BREAK_IF(!initCamera());
 		CC_BREAK_IF(!initPhysics3D());
+		CC_BREAK_IF(!initListener());
 
 		auto rootNode = CSLoader::createNode("MainScene.csb");
 		addChild(rootNode);
@@ -90,12 +91,30 @@ bool HelloWorld::initCamera()
 	return true;
 }
 
+bool HelloWorld::initListener()
+{
+	_touchListener = EventListenerTouchOneByOne::create();
+	if (_touchListener == nullptr)
+	{
+		return false;
+	}
+
+	_touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+	_touchListener->onTouchMoved = CC_CALLBACK_2(HelloWorld::onTouchMoved, this);
+	_touchListener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, this);
+	return true;
+}
+
 void HelloWorld::onExit()
 {
 	Layer::onExit();
 
 	_world->destroy();		// 销毁物理世界
 	_world = nullptr;
+
+	Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
@@ -110,6 +129,29 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
+}
+
+bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
+{
+	_box->setActivationState(ACTIVE_TAG);
+	_box->applyCentralImpulse(btVector3(0, 0, -5));
+	return true;
+}
+
+void HelloWorld::onTouchMoved(Touch *touch, Event *unused_event)
+{
+
+}
+
+void HelloWorld::onTouchEnded(Touch *touch, Event *unused_event)
+{
+
+}
+
+void HelloWorld::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	_world->debugDraw();
+	Layer::draw(renderer, transform, flags);
 }
 
 void HelloWorld::update(float delta)
