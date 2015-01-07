@@ -1,5 +1,7 @@
 #include "HelloWorldScene.h"
 #include "cocostudio/CocoStudio.h"
+#include "CameraControl.h"
+#include "Camera3D.h"
 USING_NS_CC;
 
 using namespace cocostudio::timeline;
@@ -18,7 +20,7 @@ Scene* HelloWorld::createScene()
     // return the scene
     return scene;
 }
-
+static DrawNode* drawNode;
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -38,6 +40,9 @@ bool HelloWorld::init()
 		_labelInfo = static_cast<ui::Text*>(rootNode->getChildByName("lbl_body_info"));
 		
 		this->scheduleUpdate();
+		drawNode = DrawNode::create();
+		this->addChild(drawNode);
+
 
 		return true;
 	} while (0);
@@ -63,7 +68,7 @@ bool HelloWorld::initPhysics3D()
 bool HelloWorld::initCamera()
 {
 	auto size = Director::getInstance()->getVisibleSize();
-	_camera = Camera::createPerspective(60, size.width / size.height, 0.1f, 1000);
+	_camera = Camera3D::create(60, size.width / size.height, 0.1f, 1000);
 	if (_camera == nullptr)
 	{
 		return false;
@@ -72,6 +77,12 @@ bool HelloWorld::initCamera()
 	this->addChild(_camera);
 	_camera->setPosition3D(Vec3(0, 10, 20));	// 摄像机位置
 	_camera->lookAt(Vec3::ZERO, Vec3(0, 1, 0)); // 摄像机target
+	_camera->setMoveSpeed(5.f);
+
+	auto cameraCtrl = CameraControl::create();
+	cameraCtrl->setCamera(_camera);
+	
+	this->addChild(cameraCtrl);
 
 	return true;
 }
@@ -94,15 +105,20 @@ bool HelloWorld::initListener()
 
 void HelloWorld::addSomeBodies()
 {
-	// 载入plane模型
-	auto spPlane = Sprite3D::create("model/ground.c3b"); 
-	this->addChild(spPlane);
-	spPlane->setPosition3D(Vec3::ZERO);
+	//// 载入plane模型
+	//auto spPlane = Sprite3D::create("model/ground.c3b"); 
+	//this->addChild(spPlane);
+	//spPlane->setPosition3D(Vec3::ZERO);
 
+	//// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
+	//_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
+	
 	btRigidBody* body = nullptr;
 
-	// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
-	_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
+	// add height field
+	extern char MyHeightfield[];
+	HeightfieldInfo info(50, 50, MyHeightfield, PHY_UCHAR, 0.01f, 0.f, 10, btVector3(2, 1, 2));
+	_world->addHeightfieldTerrain(info, btVector3(0, 4.6f, 2));
 
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");
@@ -110,20 +126,20 @@ void HelloWorld::addSomeBodies()
 	_spBox->setPosition3D(Vec3(0, 20, 0));
 
 	// add a box
-	_box = _world->addBox(btVector3(1, 1, 1), btVector3(0, 1, 0));
+	_box = _world->addBox(btVector3(1, 1, 1), btVector3(0, 10.f, 0));
 	_box->setUserPointer(_spBox);
 
 	// add Sphere
-	body = _world->addSphere(1.f, btVector3(-14.f, 1.f, 0.f));
+	body = _world->addSphere(1.f, btVector3(4.f, 10.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Capsule
-	body = _world->addCapsule(1.f, 1.f, btVector3(-10.f, 1.f, 0.f));
+	body = _world->addCapsule(1.f, 1.f, btVector3(-10.f, 10.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Cylinder
-	body = _world->addCylinder(btVector3(2.f, 2.0f, 2.f), btVector3(-6.f, 1.f, 0.f));
+	body = _world->addCylinder(btVector3(2.f, 2.0f, 2.f), btVector3(-6.f, 10.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Cone
-	body = _world->addCone(1.f, 2.f, btVector3(-2.f, 1.f, 0.f));
+	body = _world->addCone(1.f, 2.f, btVector3(-2.f, 10.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add multi spheres
 	btVector3 positions[] = {
@@ -168,10 +184,11 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 {
+	auto cameraPos = _camera->getPosition3D();
 	for (auto body : _rigidBodies)
 	{
 		body->setActivationState(ACTIVE_TAG);
-		body->applyCentralImpulse(btVector3(CCRANDOM_MINUS1_1() * 5, CCRANDOM_MINUS1_1() * 5, CCRANDOM_MINUS1_1() * 5));
+		body->applyCentralImpulse(btVector3(0, 5.f, 0));
 	}
 	return true;
 }

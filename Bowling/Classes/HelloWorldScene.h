@@ -6,6 +6,8 @@
 #include "physics3d/PhysicsWorld3D.h"
 USING_NS_CC;
 
+class Camera3D;
+
 class HelloWorld : public cocos2d::Layer
 {
 public:
@@ -37,7 +39,7 @@ private:
 	cocos2d::Sprite3D* _spBox;	// 盒子模型
 	ui::Text* _labelInfo;
 
-	cocos2d::Camera* _camera;	// 摄像机
+	Camera3D* _camera;	// 摄像机
 	
 	EventListenerTouchOneByOne* _touchListener;
 };

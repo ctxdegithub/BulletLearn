@@ -1,5 +1,6 @@
 #include "PhysicsWorld3D.h"
 #include "PhysicsDraw3D.h"
+#include "Bullet/BulletCollision/CollisionShapes/btHeightfieldTerrainShape.h"
 
 PhysicsWorld3D::~PhysicsWorld3D()
 {
@@ -109,8 +110,26 @@ void PhysicsWorld3D::setDebugDrawMode(int mode)
 btRigidBody* PhysicsWorld3D::addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material)
 {
 	CCAssert(material.mass == 0.f, "plane's mass must be 0.");
-	btCollisionShape* groundShape = new btStaticPlaneShape(normal, 0.f);
-	auto body = getBody(groundShape, position, material);
+	btCollisionShape* planeShape = new btStaticPlaneShape(normal, 0.f);
+	auto body = getBody(planeShape, position, material);
+
+	_world->addRigidBody(body);
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addHeightfieldTerrain(const HeightfieldInfo& fieldInfo, const btVector3& position, const PhysicsMaterial3D& material)
+{
+	CCAssert(material.mass == 0.f, "height field's mass must be 0.");
+
+	btHeightfieldTerrainShape* heightfieldShape = new btHeightfieldTerrainShape(
+		fieldInfo.heightStickWidth, fieldInfo.heightStickLength, fieldInfo.heightfieldData, fieldInfo.heightScale,
+		fieldInfo.minHeight, fieldInfo.maxHeight, fieldInfo.upAxis, fieldInfo.hdt, fieldInfo.flipQuadEdges);
+		btVector3 mmin,mmax;
+	heightfieldShape->getAabb(btTransform::getIdentity(),mmin,mmax);
+	heightfieldShape->setUseDiamondSubdivision(true);
+	heightfieldShape->setLocalScaling(fieldInfo.localScaling);
+
+	auto body = getBody(heightfieldShape, position, material);
 
 	_world->addRigidBody(body);
 	return body;

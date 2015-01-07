@@ -32,6 +32,28 @@ struct PhysicsMaterial3D
 const PhysicsMaterial3D PHYSICS_MATERIAL3D_DEFAULT(1.f, 0.5f, 0.5f, 0.0f);
 const PhysicsMaterial3D PHYSICS_MATERIAL3D_PLANE(0.f, 0.5f, 0.5f, 0.0f);
 
+struct HeightfieldInfo
+{
+	int heightStickWidth;
+	int heightStickLength;
+	void* heightfieldData;
+	PHY_ScalarType hdt;
+	btScalar heightScale;
+	btScalar minHeight;
+	btScalar maxHeight;
+	int upAxis;
+
+	bool useFloatData;
+	bool flipQuadEdges;
+	btVector3 localScaling;
+
+	HeightfieldInfo(int width, int length, void* data, PHY_ScalarType type = PHY_SHORT, btScalar heiScale = 1.f, btScalar minHei = 0.f, btScalar maxHei = 10.f, const btVector3& scale = btVector3(1, 1, 1), 
+					int up = 1, bool useFloat = false, bool filpQuad = false) :
+		heightStickWidth(width), heightStickLength(length), heightfieldData(data), heightScale(heiScale), minHeight(minHei), maxHeight(maxHei), localScaling(scale),
+		upAxis(up), hdt(type), useFloatData(useFloat), flipQuadEdges(filpQuad)
+	{}
+};
+
 class PhysicsWorld3D
 {
 public:
@@ -46,6 +68,8 @@ public:
 	void setDebugDrawMode(int mode);
 
 	btRigidBody* addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
+	btRigidBody* addHeightfieldTerrain(const HeightfieldInfo& fieldInfo, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
+
 	btRigidBody* addSphere(btScalar radius, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 	btRigidBody* addBox(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 	btRigidBody* addCylinder(const btVector3& size, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT, char xyz = 'y');

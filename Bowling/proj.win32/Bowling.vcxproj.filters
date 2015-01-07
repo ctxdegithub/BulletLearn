@@ -27,6 +27,11 @@
       <Filter>physics3D</Filter>
     </ClCompile>
     <ClCompile Include="..\classes\DrawNode3D.cpp" />
+    <ClCompile Include="..\Classes\physics3d\heightfield128x128.cpp">
+      <Filter>physics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Camera3D.cpp" />
+    <ClCompile Include="..\Classes\CameraControl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -41,6 +46,8 @@
       <Filter>physics3D</Filter>
     </ClInclude>
     <ClInclude Include="..\classes\DrawNode3D.h" />
+    <ClInclude Include="..\Classes\Camera3D.h" />
+    <ClInclude Include="..\Classes\CameraControl.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
