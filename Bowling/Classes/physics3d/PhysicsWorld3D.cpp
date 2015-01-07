@@ -20,7 +20,7 @@ void PhysicsWorld3D::clear()
 			delete body->getMotionState();
 			delete body->getCollisionShape();
 		}
-		_world->removeCollisionObject(body);  
+		_world->removeCollisionObject(obj);  
 		delete obj;
 	}
 }
@@ -218,6 +218,7 @@ btRigidBody* PhysicsWorld3D::getBody(btCollisionShape* colShape, const btVector3
 {
 	btTransform startTransform;
 	startTransform.setIdentity();
+	startTransform.setOrigin(position);
 
 	//rigidbody is dynamic if and only if mass is non zero, otherwise static
 	bool isDynamic = (material.mass != 0.f);
@@ -225,8 +226,6 @@ btRigidBody* PhysicsWorld3D::getBody(btCollisionShape* colShape, const btVector3
 	btVector3 localInertia(0,0,0);
 	if (isDynamic)
 		colShape->calculateLocalInertia(material.mass, localInertia);
-
-	startTransform.setOrigin(position);
 
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);

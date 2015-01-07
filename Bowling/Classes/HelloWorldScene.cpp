@@ -114,16 +114,16 @@ void HelloWorld::addSomeBodies()
 	_box->setUserPointer(_spBox);
 
 	// add Sphere
-	body = _world->addSphere(1.f, btVector3(-10.f, 1.f, 0.f));
+	body = _world->addSphere(1.f, btVector3(-14.f, 1.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Capsule
-	body = _world->addCapsule(1.f, 1.f, btVector3(-8.f, 1.f, 0.f));
+	body = _world->addCapsule(1.f, 1.f, btVector3(-10.f, 1.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Cylinder
 	body = _world->addCylinder(btVector3(2.f, 2.0f, 2.f), btVector3(-6.f, 1.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Cone
-	body = _world->addCone(1.f, 2.f, btVector3(-4.f, 1.f, 0.f));
+	body = _world->addCone(1.f, 2.f, btVector3(-2.f, 1.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add multi spheres
 	btVector3 positions[] = {
@@ -133,7 +133,7 @@ void HelloWorld::addSomeBodies()
 	};
 
 	btScalar radi[] = {
-		1.f, 1.f, 1.f
+		1.f, 0.5f, 1.f
 	};
 
 	body = _world->addMultiSphere(radi, positions, 3, btVector3(4.f, 3.f, 0.f));
