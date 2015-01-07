@@ -3,6 +3,9 @@
 #include "cocos2d.h"
 
 USING_NS_CC;
+#define VLD_FORCE_ENABLE
+#include "vld.h"
+#pragma comment(lib, "vld.lib")
 
 #if _MSC_VER > 1700
 #pragma comment(lib,"libcocos2d_2013.lib")
@@ -13,6 +16,7 @@ USING_NS_CC;
 #pragma comment(lib,"libbox2d_2012.lib")
 #pragma comment(lib,"libSpine_2012.lib")
 #endif
+
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                        HINSTANCE hPrevInstance,

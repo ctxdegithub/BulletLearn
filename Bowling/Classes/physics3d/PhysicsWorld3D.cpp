@@ -182,9 +182,40 @@ btRigidBody* PhysicsWorld3D::addCapsule(btScalar radius, btScalar height, const 
 	return body;
 }
 
+btRigidBody* PhysicsWorld3D::addCone(btScalar radius, btScalar height, const btVector3& position, const PhysicsMaterial3D& material, char xyz)
+{
+	btCollisionShape* colShape = nullptr;
+	switch (xyz)
+	{
+	case 'x':
+		colShape = new btConeShapeX(radius, height); // halfSize
+		break;
+	case 'y':
+		colShape = new btConeShape(radius, height); // halfSize
+		break;
+	case 'z':
+		colShape = new btConeShapeZ(radius, height); // halfSize
+		break;
+	}
+
+	auto body = getBody(colShape, position, material);
+
+	_world->addRigidBody(body);
+
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addMultiSphere(btScalar *radi, const btVector3* positions, int numSpheres, const btVector3& position, const PhysicsMaterial3D& material)
+{
+	btCollisionShape* colShape = new btMultiSphereShape(positions, radi, numSpheres);
+	auto body = getBody(colShape, position, material);
+	_world->addRigidBody(body);
+
+	return body;
+}
+
 btRigidBody* PhysicsWorld3D::getBody(btCollisionShape* colShape, const btVector3& position, const PhysicsMaterial3D& material)
 {
-	/// Create Dynamic Objects
 	btTransform startTransform;
 	startTransform.setIdentity();
 

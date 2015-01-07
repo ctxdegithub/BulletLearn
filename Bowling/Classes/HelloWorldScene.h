@@ -28,12 +28,17 @@ private:
 	bool initCamera();			// 初始化摄像机
 	bool initListener();		
 
+	void addSomeBodies();
+
 private:
 	PhysicsWorld3D* _world;		// 3d 物理世界
+	std::vector<btRigidBody*> _rigidBodies;
 	btRigidBody* _box;			// 盒子
 	cocos2d::Sprite3D* _spBox;	// 盒子模型
-	cocos2d::Camera* _camera;	// 摄像机
 	ui::Text* _labelInfo;
+
+	cocos2d::Camera* _camera;	// 摄像机
+	
 	EventListenerTouchOneByOne* _touchListener;
 };
 

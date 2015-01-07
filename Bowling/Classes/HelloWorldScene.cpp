@@ -1,6 +1,5 @@
 #include "HelloWorldScene.h"
 #include "cocostudio/CocoStudio.h"
-
 USING_NS_CC;
 
 using namespace cocostudio::timeline;
@@ -54,22 +53,7 @@ bool HelloWorld::initPhysics3D()
 		return false;
 	}
 	
-	// 载入plane模型
-	auto spPlane = Sprite3D::create("model/ground.c3b"); 
-	this->addChild(spPlane);
-	spPlane->setPosition3D(Vec3::ZERO);
-	
-	// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
-	_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
-	
-	// 载入盒子模型
-	_spBox = Sprite3D::create("model/box.c3b");
-	this->addChild(_spBox);
-	_spBox->setPosition3D(Vec3(0, 20, 0));
-
-	// add a box
-	_box = _world->addBox(btVector3(1, 1, 1), btVector3(0, 20, 0));
-	_box->setUserPointer(_spBox);
+	this->addSomeBodies();	// to test bodies
 
 	// 设置2摄像机可见
 	this->setCameraMask(2);
@@ -108,12 +92,62 @@ bool HelloWorld::initListener()
 	return true;
 }
 
+void HelloWorld::addSomeBodies()
+{
+	// 载入plane模型
+	auto spPlane = Sprite3D::create("model/ground.c3b"); 
+	this->addChild(spPlane);
+	spPlane->setPosition3D(Vec3::ZERO);
+
+	btRigidBody* body = nullptr;
+
+	// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
+	_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
+
+	// 载入盒子模型
+	_spBox = Sprite3D::create("model/box.c3b");
+	this->addChild(_spBox);
+	_spBox->setPosition3D(Vec3(0, 20, 0));
+
+	// add a box
+	_box = _world->addBox(btVector3(1, 1, 1), btVector3(0, 1, 0));
+	_box->setUserPointer(_spBox);
+
+	// add Sphere
+	body = _world->addSphere(1.f, btVector3(-10.f, 1.f, 0.f));
+	_rigidBodies.push_back(body);
+	// add Capsule
+	body = _world->addCapsule(1.f, 1.f, btVector3(-8.f, 1.f, 0.f));
+	_rigidBodies.push_back(body);
+	// add Cylinder
+	body = _world->addCylinder(btVector3(2.f, 2.0f, 2.f), btVector3(-6.f, 1.f, 0.f));
+	_rigidBodies.push_back(body);
+	// add Cone
+	body = _world->addCone(1.f, 2.f, btVector3(-4.f, 1.f, 0.f));
+	_rigidBodies.push_back(body);
+	// add multi spheres
+	btVector3 positions[] = {
+		btVector3(-1.f, 1.f, 0.f),
+		btVector3(1.f, 1.f, 0.f),
+		btVector3(0.f, -1.f, 0.f)
+	};
+
+	btScalar radi[] = {
+		1.f, 1.f, 1.f
+	};
+
+	body = _world->addMultiSphere(radi, positions, 3, btVector3(4.f, 3.f, 0.f));
+	_rigidBodies.push_back(body);
+}
+
 void HelloWorld::onExit()
 {
 	Layer::onExit();
 
 	_world->destroy();		// 销毁物理世界
 	_world = nullptr;
+
+	_rigidBodies.clear();
 
 	Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
 }
@@ -134,19 +168,11 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 {
-	_box->setActivationState(ACTIVE_TAG);
-	_box->applyCentralImpulse(btVector3(0, 0, -5));
-
-	auto pos = btVector3(0, 40, 0);
-	pos.setX(CCRANDOM_MINUS1_1() * 10);
-	pos.setZ(CCRANDOM_MINUS1_1() * 10);
-	_world->addSphere(0.5f, pos, PhysicsMaterial3D(CCRANDOM_0_1() + 0.1f, 0.5f, 0.5f, 0.7f));
-
-	static int s_bodyCount = 1;
-	s_bodyCount++;
-	auto info = __String::createWithFormat("%d", s_bodyCount)->getCString();
-	_labelInfo->setString(info);
-
+	for (auto body : _rigidBodies)
+	{
+		body->setActivationState(ACTIVE_TAG);
+		body->applyCentralImpulse(btVector3(CCRANDOM_MINUS1_1() * 5, CCRANDOM_MINUS1_1() * 5, CCRANDOM_MINUS1_1() * 5));
+	}
 	return true;
 }
 
