@@ -135,8 +135,8 @@ void HelloWorld::addSomeBodies()
 			}
 		}
 	}
-	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 1.6f / uData, -1.f, 1.f, btVector3(24.f / uData, 1.f, 24.f / uData));
-	_world->addHeightfieldTerrain(info, btVector3(0.f, 0.f, 0.f));
+	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 1.6f / uData, -1.f, 1.f, btVector3(25.f / uData, 1.f, 25.f / uData));
+	_world->addHeightfieldTerrain(info, btVector3(-0.25f, 0.f, 0.42f));
 
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");

@@ -148,6 +148,12 @@ void CameraControl::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_rotDir.y = -1;
 		break;
+	case EventKeyboard::KeyCode::KEY_I:
+		_camera->setMoveSpeed(_camera->getMoveSpeed() + 0.1f);
+		break;
+	case EventKeyboard::KeyCode::KEY_O:
+		_camera->setMoveSpeed(_camera->getMoveSpeed() - 0.1f);
+		break;
 	case EventKeyboard::KeyCode::KEY_T:
 		this->changeCameraType();
 		break;
