@@ -1,4 +1,4 @@
-char heightMap[20000] = {0};
+char heightMap[40000] = {0};
 char MyHeightfield[]={char(136),char(125),char(117),char(93),char(79),char(89),char(81),char(67),char(61),char(49),
 char(48),char(52),char(63),char(75),char(78),char(88),char(111),char(126),char(130),char(116),
 char(109),char(113),char(118),char(142),char(161),char(185),char(198),char(198),char(197),char(204),

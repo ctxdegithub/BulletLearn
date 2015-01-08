@@ -75,7 +75,7 @@ bool HelloWorld::initCamera()
 	}
 	_camera->setCameraFlag(CameraFlag::USER1); // 设置为2
 	this->addChild(_camera);
-	_camera->setPosition3D(Vec3(0, 10, 20));	// 摄像机位置
+	_camera->setPosition3D(Vec3(0, 2, 0));	// 摄像机位置
 	_camera->lookAt(Vec3::ZERO, Vec3(0, 1, 0)); // 摄像机target
 	_camera->setMoveSpeed(5.f);
 
@@ -108,9 +108,7 @@ void HelloWorld::addSomeBodies()
 	// 载入plane模型
 	auto spPlane = Sprite3D::create("map.c3b"); 
 	this->addChild(spPlane);
-	spPlane->setRotation3D(Vec3(-90, 0, 0));
-	spPlane->setScale(100);
-	spPlane->setPosition3D(Vec3(400, 340, 100));
+	spPlane->setPosition3D(Vec3(0, 0, 0));
 
 	//// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
 	//_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
@@ -118,20 +116,35 @@ void HelloWorld::addSomeBodies()
 	btRigidBody* body = nullptr;
 
 	// read raw
-	_heightMapData = FileUtils::getInstance()->getDataFromFile("image.raw");
+	_heightMapData = FileUtils::getInstance()->getDataFromFile("map.raw");
 	
 	// add height field
 	extern char heightMap[];
-	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 0.1f, 0.f, 1, btVector3(1, 1, 1));
-	_world->addHeightfieldTerrain(info, btVector3(0, 0.f, 2));
+	float *mapData = (float*)heightMap;
+	unsigned char uData = 0;
+	for (int i=0; i<128; ++i)
+	{
+		for (int j=0; j<128; ++j)
+		{
+			mapData[i*50+j] = CCRANDOM_0_1();
+			//mapData[i*50+j] *= 2;
+			//log("%d",  _heightMapData.getBytes()[i*50+j]);
+			if (uData < _heightMapData.getBytes()[i*50+j])
+			{
+				uData = _heightMapData.getBytes()[i*50+j];
+			}
+		}
+	}
+	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 1.6f / uData, -1.f, 1.f, btVector3(24.f / uData, 1.f, 24.f / uData));
+	_world->addHeightfieldTerrain(info, btVector3(0.f, 0.f, 0.f));
 
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");
 	this->addChild(_spBox);
-	_spBox->setPosition3D(Vec3(0, 20, 0));
+	_spBox->setPosition3D(Vec3(0, 5, 0));
 
 	// add a box
-	_box = _world->addBox(btVector3(1, 1, 1), btVector3(0, 10.f, 0));
+	_box = _world->addBox(btVector3(1, 1, 1), btVector3(6, 5.f, 0));
 	_box->setUserPointer(_spBox);
 
 	// add Sphere
@@ -221,4 +234,8 @@ void HelloWorld::update(float delta)
 	auto trans = _box->getWorldTransform();		// 获取box的变换矩阵
 	trans.getOpenGLMatrix(m);
 	_spBox->setNodeToParentTransform(Mat4(m));	// 设置box模型的变换矩阵，但是getPosition3D不会得到正确位置，这个以后讨论
+
+	auto camPos = _camera->getPosition3D();
+	auto camInfo = __String::createWithFormat("%.2f,%.2f,%.2f", camPos.x, camPos.y, camPos.z);
+	_labelInfo->setString(camInfo->getCString());
 }
