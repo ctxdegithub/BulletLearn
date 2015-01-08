@@ -109,8 +109,8 @@ void HelloWorld::addSomeBodies()
 	auto spPlane = Sprite3D::create("map.c3b"); 
 	this->addChild(spPlane);
 	spPlane->setRotation3D(Vec3(-90, 0, 0));
-	spPlane->setScale(200);
-	spPlane->setPosition3D(Vec3(0, 100, -100));
+	spPlane->setScale(100);
+	spPlane->setPosition3D(Vec3(400, 340, 100));
 
 	//// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
 	//_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
