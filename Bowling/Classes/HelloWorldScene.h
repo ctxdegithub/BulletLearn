@@ -42,6 +42,7 @@ private:
 	Camera3D* _camera;	// ÉãÏñ»ú
 	
 	EventListenerTouchOneByOne* _touchListener;
+	Data _heightMapData;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

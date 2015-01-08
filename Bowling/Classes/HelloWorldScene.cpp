@@ -105,20 +105,25 @@ bool HelloWorld::initListener()
 
 void HelloWorld::addSomeBodies()
 {
-	//// 载入plane模型
-	//auto spPlane = Sprite3D::create("model/ground.c3b"); 
-	//this->addChild(spPlane);
-	//spPlane->setPosition3D(Vec3::ZERO);
+	// 载入plane模型
+	auto spPlane = Sprite3D::create("map.c3b"); 
+	this->addChild(spPlane);
+	spPlane->setRotation3D(Vec3(-90, 0, 0));
+	spPlane->setScale(200);
+	spPlane->setPosition3D(Vec3(0, 100, -100));
 
 	//// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
 	//_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
 	
 	btRigidBody* body = nullptr;
 
+	// read raw
+	_heightMapData = FileUtils::getInstance()->getDataFromFile("image.raw");
+	
 	// add height field
-	extern char MyHeightfield[];
-	HeightfieldInfo info(50, 50, MyHeightfield, PHY_UCHAR, 0.01f, 0.f, 10, btVector3(2, 1, 2));
-	_world->addHeightfieldTerrain(info, btVector3(0, 4.6f, 2));
+	extern char heightMap[];
+	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 0.1f, 0.f, 1, btVector3(1, 1, 1));
+	_world->addHeightfieldTerrain(info, btVector3(0, 0.f, 2));
 
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");
