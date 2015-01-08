@@ -1,0 +1,36 @@
+btHeightfieldTerrainShape高度图分析
+类型 PHY_UCHAR
+int heightStickWidth,  			x总宽度
+int heightStickLength, 			z总长度
+const void* heightfieldData, 	数据
+btScalar heightScale,			每个字节*heightScale = 实际高度
+btScalar minHeight, 			最小高度
+btScalar maxHeight,				最大高度 
+原点 = (minHeight + maxHeight) * 0.5
+int upAxis, 					方向轴 取值 0=x, 1=y, 2=z
+PHY_ScalarType heightDataType,	
+bool flipQuadEdges;				方形裁剪
+
+50*50 数据 高度(0~2),原点(0,0.5,0)
+for (int i=0; i<50; ++i)
+{
+	for (int j=0; j<50; ++j)
+	{
+		heightMap[i*50+j] = j % 2;
+	}
+}
+如果为j % 7, minHeight = 0.f, maxHeight = 6.f;
+正好为-3.f
+如果为j % 7, minHeight = 0.f, maxHeight = 12.f;
+正好为-6.f
+如果为j % 7, minHeight = 0.f, maxHeight = 3.f;
+正好为-1.5f
+
+也就是说最低点的y = -(minHeight + maxHeight)
+不推荐minHeight + maxHeight < 0, 不稳定
+heightScale 决定最高点y = minY + max(heightfieldData) * heightScale
+
+
+对于PHY_SHORT
+heightScale 决定最高点y = minY + max(heightfieldData) * heightScale
+heightScale 决定最地点y = minY + min(heightfieldData) * heightScale
