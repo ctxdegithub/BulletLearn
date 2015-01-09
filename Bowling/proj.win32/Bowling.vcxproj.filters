@@ -32,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Camera3D.cpp" />
     <ClCompile Include="..\Classes\CameraControl.cpp" />
+    <ClCompile Include="..\Classes\physics3d\PhysicsHelper3D.cpp">
+      <Filter>physics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\physics3d\PhysicsMesh3D.cpp">
+      <Filter>physics3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -48,6 +54,12 @@
     <ClInclude Include="..\classes\DrawNode3D.h" />
     <ClInclude Include="..\Classes\Camera3D.h" />
     <ClInclude Include="..\Classes\CameraControl.h" />
+    <ClInclude Include="..\Classes\physics3d\PhysicsHelper3D.h">
+      <Filter>physics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\physics3d\PhysicsMesh3D.h">
+      <Filter>physics3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

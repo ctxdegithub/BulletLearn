@@ -2,6 +2,8 @@
 #include "cocostudio/CocoStudio.h"
 #include "CameraControl.h"
 #include "Camera3D.h"
+
+#include "physics3d/PhysicsMesh3D.h"
 USING_NS_CC;
 
 using namespace cocostudio::timeline;
@@ -105,10 +107,14 @@ bool HelloWorld::initListener()
 
 void HelloWorld::addSomeBodies()
 {
+	_phyMesh3D = PhysicsMesh3D::constuct("heightmap.raw");
+	_world->addTriangleMeshShape(_phyMesh3D, btVector3(0, 0, 0));
+
 	// 载入plane模型
-	auto spPlane = Sprite3D::create("map.c3b"); 
+	auto spPlane = Sprite3D::create("model/heightmap.c3b"); 
 	this->addChild(spPlane);
 	spPlane->setPosition3D(Vec3(0, 0, 0));
+	spPlane->setRotation3D(Vec3(0, 180, 0));
 
 	//// add a plane 方向向上,位置(0,0,0), 0.5的摩擦,0.5的弹性
 	//_world->addPlane(btVector3(0, 1, 0), btVector3(0, 0, 0), PHYSICS_MATERIAL3D_PLANE);
@@ -119,24 +125,25 @@ void HelloWorld::addSomeBodies()
 	_heightMapData = FileUtils::getInstance()->getDataFromFile("map.raw");
 	
 	// add height field
-	extern char heightMap[];
-	float *mapData = (float*)heightMap;
-	unsigned char uData = 0;
-	for (int i=0; i<128; ++i)
-	{
-		for (int j=0; j<128; ++j)
-		{
-			mapData[i*50+j] = CCRANDOM_0_1();
-			//mapData[i*50+j] *= 2;
-			//log("%d",  _heightMapData.getBytes()[i*50+j]);
-			if (uData < _heightMapData.getBytes()[i*50+j])
-			{
-				uData = _heightMapData.getBytes()[i*50+j];
-			}
-		}
-	}
-	HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 1.6f / uData, -1.f, 1.f, btVector3(25.f / uData, 1.f, 25.f / uData));
-	_world->addHeightfieldTerrain(info, btVector3(-0.25f, 0.f, 0.42f));
+	
+	//extern char heightMap[];
+	////float *mapData = (float*)heightMap;
+	//short *mapData = (short*)heightMap;
+	//unsigned char uData = 0;
+	//for (int i=0; i<128; ++i)
+	//{
+	//	for (int j=0; j<128; ++j)
+	//	{
+	//		mapData[i*128+j] = j % 2;
+	//		if (uData < _heightMapData.getBytes()[i*128+j])
+	//		{
+	//			uData = _heightMapData.getBytes()[i*128+j];
+	//		}
+	//	}
+	//}
+	//HeightfieldInfo info(128, 128, _heightMapData.getBytes(), PHY_UCHAR, 1.6f / uData, -1.f, 1.f, btVector3(25.f / uData, 1.f, 25.f / uData));
+	////HeightfieldInfo info(128, 128, mapData, PHY_SHORT, 1.f, -2.f, 1.f, btVector3(1.f, 1.f, 1.f));
+	//_world->addHeightfieldTerrain(info, btVector3(-0.25f, 0.f, 0.42f));
 
 	// 载入盒子模型
 	_spBox = Sprite3D::create("model/box.c3b");
@@ -144,11 +151,11 @@ void HelloWorld::addSomeBodies()
 	_spBox->setPosition3D(Vec3(0, 5, 0));
 
 	// add a box
-	_box = _world->addBox(btVector3(1, 1, 1), btVector3(6, 5.f, 0));
+	_box = _world->addBox(btVector3(1.f, 1.f, 1.f), btVector3(6, 5.f, 0));
 	_box->setUserPointer(_spBox);
 
 	// add Sphere
-	body = _world->addSphere(1.f, btVector3(4.f, 10.f, 0.f));
+	body = _world->addSphere(0.1f, btVector3(4.f, 10.f, 0.f));
 	_rigidBodies.push_back(body);
 	// add Capsule
 	body = _world->addCapsule(1.f, 1.f, btVector3(-10.f, 10.f, 0.f));
@@ -182,6 +189,7 @@ void HelloWorld::onExit()
 	_world = nullptr;
 
 	_rigidBodies.clear();
+	_phyMesh3D->destroy();
 
 	Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
 }

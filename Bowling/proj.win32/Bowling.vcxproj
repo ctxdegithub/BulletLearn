@@ -146,6 +146,8 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\physics3d\heightfield128x128.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp" />
+    <ClCompile Include="..\Classes\physics3d\PhysicsHelper3D.cpp" />
+    <ClCompile Include="..\Classes\physics3d\PhysicsMesh3D.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsWorld3D.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -156,6 +158,8 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
     <ClInclude Include="..\classes\DrawNode3D.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsDraw3D.h" />
+    <ClInclude Include="..\Classes\physics3d\PhysicsHelper3D.h" />
+    <ClInclude Include="..\Classes\physics3d\PhysicsMesh3D.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsWorld3D.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

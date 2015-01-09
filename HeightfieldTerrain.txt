@@ -11,20 +11,13 @@ int upAxis, 					方向轴 取值 0=x, 1=y, 2=z
 PHY_ScalarType heightDataType,	
 bool flipQuadEdges;				方形裁剪
 
-50*50 数据 高度(0~2),原点(0,0.5,0)
-for (int i=0; i<50; ++i)
-{
-	for (int j=0; j<50; ++j)
-	{
-		heightMap[i*50+j] = j % 2;
-	}
-}
-如果为j % 7, minHeight = 0.f, maxHeight = 6.f;
-正好为-3.f
-如果为j % 7, minHeight = 0.f, maxHeight = 12.f;
-正好为-6.f
-如果为j % 7, minHeight = 0.f, maxHeight = 3.f;
-正好为-1.5f
+对于heightMap[i*50+j] 
+1.如果为j % 7, minHeight = 0.f, maxHeight = 6.f;
+  最低点正好为-3.f
+2.如果为j % 7, minHeight = 0.f, maxHeight = 12.f;
+  最低点正好为-6.f
+3.如果为j % 7, minHeight = 0.f, maxHeight = 3.f;
+       最低点正好为-1.5f
 
 也就是说最低点的y = -(minHeight + maxHeight)
 不推荐minHeight + maxHeight < 0, 不稳定

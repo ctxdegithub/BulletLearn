@@ -37,6 +37,7 @@ private:
 	std::vector<btRigidBody*> _rigidBodies;
 	btRigidBody* _box;			// 盒子
 	cocos2d::Sprite3D* _spBox;	// 盒子模型
+	PhysicsMesh3D* _phyMesh3D;	// mesh shape
 	ui::Text* _labelInfo;
 
 	Camera3D* _camera;	// 摄像机
