@@ -83,6 +83,8 @@ public:
 	btRigidBody* addCone(btScalar radius, btScalar height, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT, char xyz = 'y');
 	btRigidBody* addMultiSphere(btScalar *radi, const btVector3* positions, int numSpheres, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
 
+	void removeCollisionObject(btCollisionObject* collisionObject);
+
 	void update(float dt);
 
 private:

@@ -10,22 +10,30 @@ PhysicsWorld3D::~PhysicsWorld3D()
 
 void PhysicsWorld3D::clear()
 {
-	int i;
 	//remove the bodies from the dynamics world and delete them
-	for (i = _world->getNumCollisionObjects() - 1; i >= 0; i--)
+	for (int i = _world->getNumCollisionObjects() - 1; i >= 0; i--)
 	{
-		btCollisionObject* obj = _world->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-	
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-			delete body->getCollisionShape();
-		}
-		_world->removeCollisionObject(obj);  
-		delete obj;
-	}
+		btCollisionObject* colObj = _world->getCollisionObjectArray()[i];
+		this->removeCollisionObject(colObj);
+	}
 }
+
+void PhysicsWorld3D::removeCollisionObject(btCollisionObject* collisionObject)
+{
+	btRigidBody* rigidBody = btRigidBody::upcast(collisionObject);
+	if (rigidBody != nullptr)
+	{
+		if (rigidBody->getMotionState() != nullptr)
+		{
+			delete rigidBody->getMotionState();
+		}
+		
+		delete rigidBody->getCollisionShape();
+	}
+	_world->removeCollisionObject(collisionObject);
+	delete collisionObject;
+}
+
 
 void PhysicsWorld3D::destroy()
 {

@@ -19,6 +19,9 @@ public:
 	bool init();
 	void onExit();				
 	void update(float delta);
+	void updateWorld(float delta);
+	void updateCamera(float delta);
+
 	void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags);
 
 	bool onTouchBegan(Touch *touch, Event *unused_event); 
@@ -35,8 +38,6 @@ private:
 private:
 	PhysicsWorld3D* _world;		// 3d 物理世界
 	std::vector<btRigidBody*> _rigidBodies;
-	btRigidBody* _box;			// 盒子
-	cocos2d::Sprite3D* _spBox;	// 盒子模型
 	PhysicsMesh3D* _phyMesh3D;	// mesh shape
 	ui::Text* _labelInfo;
 
