@@ -13,13 +13,18 @@
     <Filter Include="physics3D">
       <UniqueIdentifier>{0633ca63-2324-40a2-9eaa-0c0a03460a62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{49857b8c-541a-4eb1-bffc-aedd40bc98d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="camera">
+      <UniqueIdentifier>{f88a5072-5f92-4571-ae8c-e038e3f8522e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp">
       <Filter>physics3D</Filter>
     </ClCompile>
@@ -30,13 +35,27 @@
     <ClCompile Include="..\Classes\physics3d\heightfield128x128.cpp">
       <Filter>physics3D</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Camera3D.cpp" />
-    <ClCompile Include="..\Classes\CameraControl.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsHelper3D.cpp">
       <Filter>physics3D</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\physics3d\PhysicsMesh3D.cpp">
       <Filter>physics3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\classes\MainLayer.cpp" />
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Camera3D.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CameraControl.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\classes\BaseTest.cpp">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\classes\ComplexTest.cpp">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,7 +63,6 @@
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsWorld3D.h">
       <Filter>physics3D</Filter>
     </ClInclude>
@@ -52,13 +70,27 @@
       <Filter>physics3D</Filter>
     </ClInclude>
     <ClInclude Include="..\classes\DrawNode3D.h" />
-    <ClInclude Include="..\Classes\Camera3D.h" />
-    <ClInclude Include="..\Classes\CameraControl.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsHelper3D.h">
       <Filter>physics3D</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\physics3d\PhysicsMesh3D.h">
       <Filter>physics3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\classes\MainLayer.h" />
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Camera3D.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CameraControl.h">
+      <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\classes\BaseTest.h">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\classes\ComplexTest.h">
+      <Filter>test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

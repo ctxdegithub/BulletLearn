@@ -140,10 +140,13 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\classes\BaseTest.cpp" />
     <ClCompile Include="..\Classes\Camera3D.cpp" />
     <ClCompile Include="..\Classes\CameraControl.cpp" />
     <ClCompile Include="..\classes\DrawNode3D.cpp" />
+    <ClCompile Include="..\classes\ComplexTest.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\classes\MainLayer.cpp" />
     <ClCompile Include="..\Classes\physics3d\heightfield128x128.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsDraw3D.cpp" />
     <ClCompile Include="..\Classes\physics3d\PhysicsHelper3D.cpp" />
@@ -153,10 +156,13 @@ xcopy /Y /Q "$(COCOS_X_ROOT)\prebuilt\win32\*.*" "$(OutDir)"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\classes\BaseTest.h" />
     <ClInclude Include="..\Classes\Camera3D.h" />
     <ClInclude Include="..\Classes\CameraControl.h" />
     <ClInclude Include="..\classes\DrawNode3D.h" />
+    <ClInclude Include="..\classes\ComplexTest.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\classes\MainLayer.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsDraw3D.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsHelper3D.h" />
     <ClInclude Include="..\Classes\physics3d\PhysicsMesh3D.h" />

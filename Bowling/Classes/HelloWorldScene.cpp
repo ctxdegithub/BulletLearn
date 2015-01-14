@@ -1,50 +1,19 @@
 #include "HelloWorldScene.h"
-#include "cocostudio/CocoStudio.h"
-#include "CameraControl.h"
-#include "Camera3D.h"
-
 #include "physics3d/PhysicsMesh3D.h"
-USING_NS_CC;
 
-using namespace cocostudio::timeline;
-
-Scene* HelloWorld::createScene()
-{
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
-
-    // add layer as a child to scene
-    scene->addChild(layer);
-
-    // return the scene
-    return scene;
-}
-static DrawNode* drawNode;
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
     do
 	{
-		CC_BREAK_IF(!Layer::init());
-
+		CC_BREAK_IF(!BaseTest::init());
+		
 		CC_BREAK_IF(!initCamera());
 		CC_BREAK_IF(!initPhysics3D());
 		CC_BREAK_IF(!initListener());
+		
+		CC_BREAK_IF(!initUI());
 
-		auto rootNode = CSLoader::createNode("MainScene.csb");
-		addChild(rootNode);
-		auto closeItem = static_cast<ui::Button*>(rootNode->getChildByName("Button_1"));
-		closeItem->addClickEventListener(CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-		
-		_labelInfo = static_cast<ui::Text*>(rootNode->getChildByName("lbl_body_info"));
-		
 		this->scheduleUpdate();
-		drawNode = DrawNode::create();
-		this->addChild(drawNode);
-
 
 		return true;
 	} while (0);
@@ -64,28 +33,6 @@ bool HelloWorld::initPhysics3D()
 
 	// 设置2摄像机可见
 	this->setCameraMask(2);
-	return true;
-}
-
-bool HelloWorld::initCamera()
-{
-	auto size = Director::getInstance()->getVisibleSize();
-	_camera = Camera3D::create(60, size.width / size.height, 0.1f, 1000);
-	if (_camera == nullptr)
-	{
-		return false;
-	}
-	_camera->setCameraFlag(CameraFlag::USER1); // 设置为2
-	this->addChild(_camera);
-	_camera->setPosition3D(Vec3(0, 2, 0));	// 摄像机位置
-	_camera->lookAt(Vec3::ZERO, Vec3(0, 1, 0)); // 摄像机target
-	_camera->setMoveSpeed(5.f);
-
-	auto cameraCtrl = CameraControl::create();
-	cameraCtrl->setCamera(_camera);
-	
-	this->addChild(cameraCtrl);
-
 	return true;
 }
 
@@ -194,8 +141,6 @@ void HelloWorld::addSomeBodies()
 
 void HelloWorld::onExit()
 {
-	Layer::onExit();
-
 	_world->destroy();		// 销毁物理世界
 	_world = nullptr;
 
@@ -203,20 +148,8 @@ void HelloWorld::onExit()
 	_phyMesh3D->destroy();
 
 	Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
-}
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
-
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+	Layer::onExit();
 }
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
@@ -242,8 +175,8 @@ void HelloWorld::onTouchEnded(Touch *touch, Event *unused_event)
 
 void HelloWorld::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	//_world->debugDraw();
 	Layer::draw(renderer, transform, flags);
+	//_world->debugDraw();
 }
 
 void HelloWorld::update(float delta)
