@@ -26,7 +26,9 @@ private:
 
 private:
 	PhysicsWorld3D* _world;
+	std::vector<PhysicsShapeInfo3D> _shapes;
 	btRigidBody* _boxBody;
+	btRigidBody* _convexBody;
 	bool _bForce;
 
 	EventListenerTouchOneByOne* _touchListener;

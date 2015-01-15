@@ -58,6 +58,30 @@ struct HeightfieldInfo
 	{}
 };
 
+struct PhysicsShapeInfo3D
+{
+// 	enum class ShapeType3D
+// 	{
+// 		BOX,
+// 		SPHERE,
+// 		CYLINDER,
+// 		CAPSULE,
+// 		CONE,
+// 	};
+// 
+// 	ShapeType3D shapeType;
+	btCollisionShape* colShape;
+	btTransform transform;
+
+	PhysicsShapeInfo3D() {};
+
+	PhysicsShapeInfo3D(/*ShapeType3D type,*/ btCollisionShape* shape, btTransform& trans)
+		: /*shapeType(type), */ colShape(shape), transform(trans)
+	{
+
+	}
+};
+
 class PhysicsWorld3D
 {
 public:
@@ -71,7 +95,12 @@ public:
 
 	void setDebugDrawMode(int mode);
 
-	btRigidBody* addTriangleMeshShape(PhysicsMesh3D* mesh3D, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
+	btRigidBody* addCompound(std::vector<PhysicsShapeInfo3D>& shapeList, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
+
+	btRigidBody* addConvexHull(std::vector<btVector3>& points, const btVector3& position, bool bPoly = true, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
+	btRigidBody* addConvexHull(const float* floatData, int numPoints, const btVector3& position, bool bPoly = true, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_DEFAULT);
+
+	btRigidBody* addTriangleMesh(PhysicsMesh3D* mesh3D, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
 
 	btRigidBody* addPlane(const btVector3& normal, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);
 	btRigidBody* addHeightfieldTerrain(const HeightfieldInfo& fieldInfo, const btVector3& position, const PhysicsMaterial3D& material = PHYSICS_MATERIAL3D_PLANE);

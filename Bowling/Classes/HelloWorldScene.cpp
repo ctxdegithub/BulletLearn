@@ -55,7 +55,7 @@ bool HelloWorld::initListener()
 void HelloWorld::addSomeBodies()
 {
 	_phyMesh3D = PhysicsMesh3D::constuct("map.raw");
-	_world->addTriangleMeshShape(_phyMesh3D, btVector3(0, 0, 0));
+	_world->addTriangleMesh(_phyMesh3D, btVector3(0, 0, 0));
 
 	// ÔØÈëplaneÄ£ĞÍ
 	auto spPlane = Sprite3D::create("model/map.c3b"); 

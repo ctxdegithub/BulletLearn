@@ -116,7 +116,39 @@ void PhysicsWorld3D::setDebugDrawMode(int mode)
 	}
 }
 
-btRigidBody* PhysicsWorld3D::addTriangleMeshShape(PhysicsMesh3D* mesh3D, const btVector3& position, const PhysicsMaterial3D& material)
+btRigidBody* PhysicsWorld3D::addCompound(std::vector<PhysicsShapeInfo3D>& shapeList, const btVector3& position, const PhysicsMaterial3D& material /* = PHYSICS_MATERIAL3D_DEFAULT */)
+{
+	btCompoundShape* shape = new btCompoundShape;
+	
+	for (auto& shapeInfo : shapeList)
+	{
+		shape->addChildShape(shapeInfo.transform, shapeInfo.colShape);
+	}
+	
+	auto body = getBody(shape, position, material);
+	_world->addRigidBody(body);
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addConvexHull(std::vector<btVector3>& points, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
+{
+	auto body = addConvexHull(points[0].m_floats, points.size(), position, bPoly, material);
+
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addConvexHull(const float* floatData, int numPoints, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
+{
+	btConvexHullShape* colShape = new btConvexHullShape(floatData, numPoints, sizeof(btVector3));
+	colShape->initializePolyhedralFeatures();
+
+	auto body = getBody(colShape, position, material);
+	_world->addRigidBody(body);
+
+	return body;
+}
+
+btRigidBody* PhysicsWorld3D::addTriangleMesh(PhysicsMesh3D* mesh3D, const btVector3& position, const PhysicsMaterial3D& material)
 {
 	CCAssert(material.mass == 0.f, "body's mass must be 0.");
 

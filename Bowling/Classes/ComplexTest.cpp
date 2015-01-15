@@ -1,5 +1,6 @@
 #include "ComplexTest.h"
 #include "Bullet/btBulletCollisionCommon.h"
+#include "physics3d/PhysicsHelper3D.h"
 
 bool ComplexTest::init()
 {
@@ -33,8 +34,35 @@ bool ComplexTest::initPhysics3D()
 		}
 	}
 
-	_boxBody = _world->addBox(btVector3(2.f, 2.f, 2.f), btVector3(0, 0, 15), 
-		PhysicsMaterial3D(2.f, 0.5f, 0.5f, 0.f));
+// 	std::vector<float> points;
+// 	PhysicsHelper3D::loadRaw("test.raw", points);
+// 
+// 	_convexBody = _world->addConvexHullShape(&points[0], points.size() / 3, btVector3(0, 0, 5), true, PhysicsMaterial3D(5.f, 0.5f, 0.5f, 0.f));
+
+
+	PhysicsShapeInfo3D shapeInfo;
+	btTransform trans;
+	trans.setIdentity();
+	btCollisionShape* shape;
+	
+	// 1
+	shape = new btBoxShape(btVector3(1.f, 1.f, 1.f));
+	shapeInfo.colShape = shape;
+	
+	trans.setOrigin(btVector3(0, 1, 0));
+	shapeInfo.transform = trans;
+	_shapes.push_back(shapeInfo);
+
+	// 2
+	shape = new btSphereShape(1.f);
+	shapeInfo.colShape = shape;
+	trans.setOrigin(btVector3(0, 3, 0));
+	shapeInfo.transform = trans;
+	_shapes.push_back(shapeInfo);
+
+	_world->addCompound(_shapes, btVector3(0, 0, 5.f));
+	
+	_boxBody = _world->addBox(btVector3(1, 1, 1), btVector3(0, 10, 10));
 
 	_bForce = false;
 
@@ -61,6 +89,11 @@ bool ComplexTest::initListener()
 void ComplexTest::onExit()
 {
 	_world->destroy();
+	for (auto& shapeInfo : _shapes)
+	{
+		delete shapeInfo.colShape;
+	}
+	_shapes.clear();
 	Layer::onExit();
 }
 
@@ -74,7 +107,8 @@ void ComplexTest::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags
 bool ComplexTest::onTouchBegan(Touch *touch, Event *unused_event)
 {
 	_bForce = true;
-
+	_boxBody->setActivationState(ACTIVE_TAG);
+//	_boxBody->applyCentralImpulse(btVector3(0, 0, -10));
 	return true;
 }
 
@@ -97,7 +131,8 @@ void ComplexTest::updateWorld(float delta)
 {
 	if (_bForce)
 	{
-		//_boxBody->applyCentralForce(btVector3(impulse.x, impulse.y, impulse.z));
+		_boxBody->setActivationState(ACTIVE_TAG);
+		_boxBody->applyCentralForce(btVector3(0, 0, -10.f));
 	}
 	_world->update(delta);
 }
