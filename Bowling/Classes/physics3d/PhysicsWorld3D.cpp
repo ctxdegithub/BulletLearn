@@ -116,7 +116,7 @@ void PhysicsWorld3D::setDebugDrawMode(int mode)
 	}
 }
 
-btRigidBody* PhysicsWorld3D::addCompound(std::vector<PhysicsShapeInfo3D>& shapeList, const btVector3& position, const PhysicsMaterial3D& material /* = PHYSICS_MATERIAL3D_DEFAULT */)
+btRigidBody* PhysicsWorld3D::addCompound(std::vector<PhysicsShapeInfo3D>& shapeList, const btVector3& position, const PhysicsMaterial3D& material)
 {
 	btCompoundShape* shape = new btCompoundShape;
 	
@@ -130,20 +130,23 @@ btRigidBody* PhysicsWorld3D::addCompound(std::vector<PhysicsShapeInfo3D>& shapeL
 	return body;
 }
 
-btRigidBody* PhysicsWorld3D::addConvexHull(std::vector<btVector3>& points, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
+btRigidBody* PhysicsWorld3D::addConvexHull(const float* floatData, int numPoints, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
 {
-	auto body = addConvexHull(points[0].m_floats, points.size(), position, bPoly, material);
+	btConvexHullShape* colShape = new btConvexHullShape(floatData, numPoints, sizeof(btVector3));
+	if (bPoly)
+	{
+		colShape->initializePolyhedralFeatures();
+	}
+
+	auto body = getBody(colShape, position, material);
+	_world->addRigidBody(body);
 
 	return body;
 }
 
-btRigidBody* PhysicsWorld3D::addConvexHull(const float* floatData, int numPoints, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
+btRigidBody* PhysicsWorld3D::addConvexHull(std::vector<btVector3>& points, const btVector3& position, bool bPoly, const PhysicsMaterial3D& material)
 {
-	btConvexHullShape* colShape = new btConvexHullShape(floatData, numPoints, sizeof(btVector3));
-	colShape->initializePolyhedralFeatures();
-
-	auto body = getBody(colShape, position, material);
-	_world->addRigidBody(body);
+	auto body = addConvexHull(points[0].m_floats, points.size(), position, bPoly, material);
 
 	return body;
 }

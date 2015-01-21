@@ -25,7 +25,7 @@ bool MainLayer::init()
 	menuHello->setPosition(Vec2(size.width * 0.5f, size.height * 0.9f));
 
 	// force impulse
-	auto lblFI = Label::createWithSystemFont("ForceImpulse", "Arial", 24);
+	auto lblFI = Label::createWithSystemFont("ComplexTest", "Arial", 24);
 	auto menuFI = MenuItemLabel::create(lblFI, CC_CALLBACK_1(MainLayer::menuComplexTest, this));
 	menuFI->setPosition(Vec2(size.width * 0.5f, size.height * 0.8f));
 

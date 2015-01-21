@@ -34,11 +34,11 @@ bool ComplexTest::initPhysics3D()
 		}
 	}
 
-// 	std::vector<float> points;
-// 	PhysicsHelper3D::loadRaw("test.raw", points);
-// 
-// 	_convexBody = _world->addConvexHullShape(&points[0], points.size() / 3, btVector3(0, 0, 5), true, PhysicsMaterial3D(5.f, 0.5f, 0.5f, 0.f));
+	std::vector<float> points;
+	PhysicsHelper3D::loadRaw("monkey.raw", points);
 
+ 	_convexBody = _world->addConvexHull(&points[0], points.size() / 3, btVector3(-2, 0, 5), false, PhysicsMaterial3D(5.f, 0.5f, 0.5f, 0.f));
+	_convexBody = _world->addConvexHull(&points[0], points.size() / 3, btVector3(2, 0, 5), true, PhysicsMaterial3D(5.f, 0.5f, 0.5f, 0.f));
 
 	PhysicsShapeInfo3D shapeInfo;
 	btTransform trans;
@@ -60,7 +60,7 @@ bool ComplexTest::initPhysics3D()
 	shapeInfo.transform = trans;
 	_shapes.push_back(shapeInfo);
 
-	_world->addCompound(_shapes, btVector3(0, 0, 5.f));
+	//_world->addCompound(_shapes, btVector3(0, 0, 5.f));
 	
 	_boxBody = _world->addBox(btVector3(1, 1, 1), btVector3(0, 10, 10));
 
